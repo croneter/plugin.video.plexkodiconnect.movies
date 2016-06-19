@@ -24,7 +24,7 @@ import entrypoint
 base_url = sys.argv[0]
 addon_handle = int(sys.argv[1])
 params = urlparse.parse_qs(sys.argv[2][1:])
-xbmc.log("Parameter string: %s" % sys.argv[2])
+xbmc.log("PlexKodiConnect Parameter string: %s" % sys.argv[2])
 
 try:
     mode = params['mode'][0]
@@ -33,7 +33,9 @@ try:
 
 except (KeyError, IndexError):
     if "extrafanart" in sys.argv[0]:
-        entrypoint.getExtraFanArt()
+        plexpath = sys.argv[2][1:]
+        plexid = params.get('id', [""])[0]
+        entrypoint.getExtraFanArt(plexid, plexpath)
 
 else:
     if "play" in mode:
