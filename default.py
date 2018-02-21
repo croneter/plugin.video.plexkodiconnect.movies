@@ -1,64 +1,66 @@
 # -*- coding: utf-8 -*-
-
+# We need this in order to use add-on paths like
+# 'plugin://plugin.video.plexkodiconnect.MOVIES' in the Kodi video database
 ###############################################################################
 import logging
-import os
 import sys
-import urlparse
+from os import path as os_path
 
 import xbmc
+import xbmcgui
 import xbmcaddon
+import xbmcplugin
 
-_addon = xbmcaddon.Addon(id='plugin.video.plexkodiconnect')
+_ADDON = xbmcaddon.Addon(id='plugin.video.plexkodiconnect.movies')
 try:
-    _addon_path = _addon.getAddonInfo('path').decode('utf-8')
+    _ADDON_PATH = _ADDON.getAddonInfo('path').decode('utf-8')
 except TypeError:
-    _addon_path = _addon.getAddonInfo('path').decode()
+    _ADDON_PATH = _ADDON.getAddonInfo('path').decode()
 try:
-    _base_resource = xbmc.translatePath(os.path.join(
-        _addon_path,
+    _BASE_RESOURCE = xbmc.translatePath(os_path.join(
+        _ADDON_PATH,
         'resources',
         'lib')).decode('utf-8')
 except TypeError:
-    _base_resource = xbmc.translatePath(os.path.join(
-        _addon_path,
+    _BASE_RESOURCE = xbmc.translatePath(os_path.join(
+        _ADDON_PATH,
         'resources',
         'lib')).decode()
-sys.path.append(_base_resource)
+sys.path.append(_BASE_RESOURCE)
 
 ###############################################################################
-
+import pickler
+import PKC_listitem
+import utils
 import loghandler
-
+###############################################################################
 loghandler.config()
-log = logging.getLogger("PLEX.default")
-
-addonName = "PlexKodiConnect"
-
+LOG = logging.getLogger('PLEX.MOVIES')
 ###############################################################################
 
+HANDLE = int(sys.argv[1])
 
-import entrypoint
 
-# Parse parameters
-base_url = sys.argv[0]
-addon_handle = int(sys.argv[1])
-params = urlparse.parse_qs(sys.argv[2][1:])
-log.debug("Called with: %s" % sys.argv)
+def play():
+    """
+    Start up playback_starter in main Python thread
+    """
+    LOG.debug('Full sys.argv received: %s', sys.argv)
+    # Put the request into the 'queue'
+    utils.plex_command('PLAY', sys.argv[2])
+    # Wait for the result
+    while not pickler.pickl_window('plex_result'):
+        xbmc.sleep(50)
+    result = pickler.unpickle_me()
+    if result is None:
+        LOG.error('Error encountered, aborting')
+        xbmcplugin.setResolvedUrl(HANDLE, False, xbmcgui.ListItem())
+    elif result.listitem:
+        listitem = PKC_listitem.convert_PKC_to_listitem(result.listitem)
+        xbmcplugin.setResolvedUrl(HANDLE, True, listitem)
 
-try:
-    mode = params['mode'][0]
-    itemid = params['id'][0]
-    dbid = params['dbid'][0]
 
-except (KeyError, IndexError):
-    if "extrafanart" in sys.argv[0]:
-        plexpath = sys.argv[2][1:]
-        plexid = params.get('id', [""])[0]
-        entrypoint.getExtraFanArt(plexid, plexpath)
-
-else:
-    if "play" in mode:
-        # plugin.video.emby entrypoint
-        log.debug("mode: %s, itemid: %s, dbid: %s" % (mode, itemid, dbid))
-        entrypoint.doPlayback(itemid, dbid)
+if __name__ == '__main__':
+    LOG.info('PKC add-on for movies started')
+    play()
+    LOG.info('PKC add-on for movies stopped')

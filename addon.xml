@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.plexkodiconnect.movies" name="PlexKodiConnect" version="1.0.2" provider-name="croneter">
+<addon id="plugin.video.plexkodiconnect.movies" name="PlexKodiConnect Helper Movies" version="2.0.0" provider-name="croneter">
     <requires>
         <import addon="xbmc.python" version="2.1.0"/>
         <import addon="script.module.requests" version="2.3.0"/>
@@ -8,8 +8,8 @@
         <provides></provides>
     </extension>
     <extension point="xbmc.addon.metadata">
-        <summary lang="en">Dependency add-on</summary>
-        <description lang="en">plugin.video.plexkodiconnect dependency for music videos.</description>
+        <summary lang="en">PKC Dependency Add-On</summary>
+        <description lang="en">PlexKodiConnect add-on for movies</description>
         <platform>all</platform>
         <language>en</language>
         <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
