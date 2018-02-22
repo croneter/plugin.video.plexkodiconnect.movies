@@ -2,7 +2,7 @@
 <addon id="plugin.video.plexkodiconnect.movies" name="PlexKodiConnect Helper Movies" version="2.0.0" provider-name="croneter">
     <requires>
         <import addon="xbmc.python" version="2.1.0"/>
-        <import addon="script.module.requests" version="2.3.0"/>
+        <import addon="script.module.requests" version="2.9.1"/>
     </requires>
     <extension point="xbmc.python.pluginsource" library="default.py">
         <provides></provides>
