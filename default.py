@@ -48,6 +48,9 @@ def play():
     LOG.debug('Full sys.argv received: %s', sys.argv)
     # Put the request into the 'queue'
     utils.plex_command('PLAY', sys.argv[2])
+    if HANDLE == -1:
+        # Handle -1 received, not waiting for main thread
+        return
     # Wait for the result
     while not pickler.pickl_window('plex_result'):
         xbmc.sleep(50)
