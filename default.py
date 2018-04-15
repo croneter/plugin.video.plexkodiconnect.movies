@@ -46,8 +46,9 @@ def play():
     Start up playback_starter in main Python thread
     """
     LOG.debug('Full sys.argv received: %s', sys.argv)
+    request = '%s&handle=%s' % (sys.argv[2], HANDLE)
     # Put the request into the 'queue'
-    utils.plex_command('PLAY', sys.argv[2])
+    utils.plex_command('PLAY', request)
     if HANDLE == -1:
         # Handle -1 received, not waiting for main thread
         return
