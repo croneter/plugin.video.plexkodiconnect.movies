@@ -1,0 +1,6 @@
+version 2.0.2
+- Also pass handle of add-on call to main thread
+
+version 2.0.1
+- Correctly handle direct plugin calls
+- Drop python requests dependency
