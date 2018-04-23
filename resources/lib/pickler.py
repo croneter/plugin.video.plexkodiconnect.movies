@@ -4,6 +4,9 @@ import cPickle
 
 from xbmcgui import Window
 from xbmc import log, LOGDEBUG
+
+import utils
+
 ###############################################################################
 WINDOW = Window(10000)
 PREFIX = 'PLEX.MOVIES.%s: ' % __name__
@@ -13,14 +16,16 @@ PREFIX = 'PLEX.MOVIES.%s: ' % __name__
 def pickl_window(property, value=None, clear=False):
     """
     Get or set window property - thread safe! For use with Pickle
-    Property and value must be string
+    Property and value must be string.
+
+    Returns string.
     """
     if clear:
         WINDOW.clearProperty(property)
     elif value is not None:
         WINDOW.setProperty(property, value)
     else:
-        return WINDOW.getProperty(property)
+        return utils.try_encode(WINDOW.getProperty(property))
 
 
 def pickle_me(obj, window_var='plex_result'):
