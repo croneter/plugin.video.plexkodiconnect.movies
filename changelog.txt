@@ -1,3 +1,9 @@
+version 2.0.4
+- Kodi Leia compatibility: fix EOFError for cPickle Python module
+
+version 2.0.3
+- Version omitted to be on-par with TV shows helper add-on
+
 version 2.0.2
 - Also pass handle of add-on call to main thread
 
