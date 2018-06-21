@@ -1,31 +1,44 @@
 # -*- coding: utf-8 -*-
 ###############################################################################
-import cPickle
-
+from cPickle import dumps, loads
 from xbmcgui import Window
 from xbmc import log, LOGDEBUG
 
-import utils
-
 ###############################################################################
 WINDOW = Window(10000)
-PREFIX = 'PLEX.MOVIES.%s: ' % __name__
+PREFIX = 'PLEX.MOVIES.pickler: '
 ###############################################################################
+
+
+def try_encode(input_str, encoding='utf-8'):
+    """
+    Will try to encode input_str (in unicode) to encoding. This possibly
+    fails with e.g. Android TV's Python, which does not accept arguments for
+    string.encode()
+
+    COPY to avoid importing utils on calling default.py
+    """
+    if isinstance(input_str, str):
+        # already encoded
+        return input_str
+    try:
+        input_str = input_str.encode(encoding, "ignore")
+    except TypeError:
+        input_str = input_str.encode()
+    return input_str
 
 
 def pickl_window(property, value=None, clear=False):
     """
     Get or set window property - thread safe! For use with Pickle
-    Property and value must be string.
-
-    Returns string.
+    Property and value must be string
     """
     if clear:
         WINDOW.clearProperty(property)
     elif value is not None:
         WINDOW.setProperty(property, value)
     else:
-        return utils.try_encode(WINDOW.getProperty(property))
+        return try_encode(WINDOW.getProperty(property))
 
 
 def pickle_me(obj, window_var='plex_result'):
@@ -38,7 +51,7 @@ def pickle_me(obj, window_var='plex_result'):
     functions won't work. See the Pickle documentation
     """
     log('%sStart pickling' % PREFIX, level=LOGDEBUG)
-    pickl_window(window_var, value=cPickle.dumps(obj))
+    pickl_window(window_var, value=dumps(obj))
     log('%sSuccessfully pickled' % PREFIX, level=LOGDEBUG)
 
 
@@ -50,7 +63,7 @@ def unpickle_me(window_var='plex_result'):
     result = pickl_window(window_var)
     pickl_window(window_var, clear=True)
     log('%sStart unpickling' % PREFIX, level=LOGDEBUG)
-    obj = cPickle.loads(result)
+    obj = loads(result)
     log('%sSuccessfully unpickled' % PREFIX, level=LOGDEBUG)
     return obj
 
