@@ -9,7 +9,8 @@ import xbmc
 import xbmcgui
 import xbmcplugin
 
-from resources.lib import pickler, pkc_listitem, utils, loghandler
+from resources.lib import pickler, pkc_listitem, utils, loghandler, \
+    unicode_paths
 ###############################################################################
 loghandler.config()
 LOG = getLogger('PLEX.MOVIES')
@@ -23,7 +24,7 @@ def play():
     Start up playback_starter in main Python thread
     """
     LOG.debug('Full sys.argv received: %s', argv)
-    request = '%s&handle=%s' % (argv[2], HANDLE)
+    request = '%s&handle=%s' % (unicode_paths.decode(argv[2]), HANDLE)
     # Put the request into the 'queue'
     utils.plex_command('PLAY', request)
     if HANDLE == -1:
