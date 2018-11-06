@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+from __future__ import absolute_import, division, unicode_literals
 import xbmc
 import xbmcgui
 ###############################################################################
@@ -68,3 +71,33 @@ def plex_command(key, value):
     while window('plex_command'):
         xbmc.sleep(20)
     window('plex_command', value='%s-%s' % (key, value))
+
+
+def cast(func, value):
+    """
+    Cast the specified value to the specified type (returned by func). Currently this
+    only support int, float, bool. Should be extended if needed.
+    Parameters:
+        func (func): Calback function to used cast to type (int, bool, float).
+        value (any): value to be cast and returned.
+    """
+    if value is not None:
+        if func == bool:
+            return bool(int(value))
+        elif func == unicode:
+            if isinstance(value, (int, long, float)):
+                return unicode(value)
+            else:
+                return value.decode('utf-8')
+        elif func == str:
+            if isinstance(value, (int, long, float)):
+                return str(value)
+            else:
+                return value.encode('utf-8')
+        elif func in (int, float):
+            try:
+                return func(value)
+            except ValueError:
+                return float('nan')
+        return func(value)
+    return value

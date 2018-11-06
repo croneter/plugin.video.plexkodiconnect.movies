@@ -1,6 +1,8 @@
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
-###############################################################################
+from __future__ import absolute_import, division, unicode_literals
 from xbmcgui import ListItem
+from . import utils
 
 
 def convert_pkc_to_listitem(pkc_listitem):
@@ -20,7 +22,7 @@ def convert_pkc_to_listitem(pkc_listitem):
     if data['art']:
         listitem.setArt(data['art'])
     for key, value in data['property'].iteritems():
-        listitem.setProperty(key, value)
+        listitem.setProperty(key, utils.cast(str, value))
     if data['subtitles']:
         listitem.setSubtitles(data['subtitles'])
     return listitem
