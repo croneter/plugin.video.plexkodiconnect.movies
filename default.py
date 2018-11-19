@@ -26,7 +26,7 @@ def play():
     LOG.debug('Full sys.argv received: %s', argv)
     request = '%s&handle=%s' % (unicode_paths.decode(argv[2]), HANDLE)
     # Put the request into the 'queue'
-    utils.plex_command('PLAY', request)
+    utils.plex_command('PLAY-%s' % request)
     if HANDLE == -1:
         # Handle -1 received, not waiting for main thread
         return
