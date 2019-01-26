@@ -4,42 +4,50 @@
 ###############################################################################
 from __future__ import absolute_import, division, unicode_literals
 from logging import getLogger
-from sys import argv
+import sys
+import os
+
 import xbmc
 import xbmcgui
 import xbmcplugin
+import xbmcaddon
 
-from resources.lib import pickler, pkc_listitem, utils, loghandler, \
-    unicode_paths
+# Import from the main pkc add-on
+__addon__ = xbmcaddon.Addon(id='plugin.video.plexkodiconnect')
+__base__ = xbmc.translatePath(os.path.join(__addon__.getAddonInfo('path'), 'resources', 'lib')).decode('utf-8')
+sys.path.append(__base__)
+
+import transfer, loghandler
+from tools import unicode_paths
+
 ###############################################################################
 loghandler.config()
 LOG = getLogger('PLEX.MOVIES')
 ###############################################################################
 
-HANDLE = int(argv[1])
+HANDLE = int(sys.argv[1])
 
 
 def play():
     """
     Start up playback_starter in main Python thread
     """
-    LOG.debug('Full sys.argv received: %s', argv)
-    request = '%s&handle=%s' % (unicode_paths.decode(argv[2]), HANDLE)
+    LOG.debug('Full sys.argv received: %s', sys.argv)
+    request = '%s&handle=%s' % (unicode_paths.decode(sys.argv[2]), HANDLE)
     # Put the request into the 'queue'
-    utils.plex_command('PLAY-%s' % request)
+    transfer.plex_command('PLAY-%s' % request)
     if HANDLE == -1:
         # Handle -1 received, not waiting for main thread
         return
     # Wait for the result
-    while not pickler.pickl_window('plex_result'):
-        xbmc.sleep(50)
-    result = pickler.unpickle_me()
+    result = transfer.wait_for_transfer()
     if result is None:
         LOG.error('Error encountered, aborting')
         xbmcplugin.setResolvedUrl(HANDLE, False, xbmcgui.ListItem())
-    elif result.listitem:
-        listitem = pkc_listitem.convert_pkc_to_listitem(result.listitem)
-        xbmcplugin.setResolvedUrl(HANDLE, True, listitem)
+    elif result is True:
+        pass
+    else:
+        xbmcplugin.setResolvedUrl(HANDLE, True, result)
 
 
 if __name__ == '__main__':
