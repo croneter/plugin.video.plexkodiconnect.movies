@@ -14,7 +14,8 @@ import xbmcaddon
 
 # Import from the main pkc add-on
 __addon__ = xbmcaddon.Addon(id='plugin.video.plexkodiconnect')
-__base__ = xbmc.translatePath(os.path.join(__addon__.getAddonInfo('path'), 'resources', 'lib')).decode('utf-8')
+__temp_path__ = os.path.join(__addon__.getAddonInfo('path').decode('utf-8'), 'resources', 'lib')
+__base__ = xbmc.translatePath(__temp_path__.encode('utf-8')).decode('utf-8')
 sys.path.append(__base__)
 
 import transfer, loghandler
