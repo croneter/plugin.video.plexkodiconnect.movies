@@ -41,12 +41,11 @@ def play():
         # Handle -1 received, not waiting for main thread
         return
     # Wait for the result
-    result = transfer.wait_for_transfer()
-    if result is None:
-        LOG.error('Error encountered, aborting')
+    result = transfer.wait_for_transfer(source='main')
+    if result is True:
         xbmcplugin.setResolvedUrl(HANDLE, False, xbmcgui.ListItem())
-    elif result is True:
-        xbmcplugin.setResolvedUrl(HANDLE, False, xbmcgui.ListItem())
+        # Tell main thread that we're done
+        transfer.send(True, target='main')
     else:
         xbmcplugin.setResolvedUrl(HANDLE, True, result)
 
