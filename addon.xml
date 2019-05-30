@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.plexkodiconnect.movies" name="PlexKodiConnect Helper Movies" version="2.1.0" provider-name="croneter">
+<addon id="plugin.video.plexkodiconnect.movies" name="PlexKodiConnect Helper Movies" version="2.1.1" provider-name="croneter">
     <requires>
         <import addon="xbmc.python" version="2.1.0"/>
     </requires>
@@ -15,7 +15,10 @@
         <forum></forum>
         <website>https://github.com/croneter/PlexKodiConnect</website>
         <source></source>
-        <news>version 2.1.0
+        <news>version 2.1.1
+- Another attempt to keep Kodi from crashing on playback startup
+
+version 2.1.0
 - Hopefully fix Kodi crashing on playback startup
 
 version 2.0.9
