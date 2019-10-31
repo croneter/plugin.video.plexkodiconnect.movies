@@ -1,3 +1,6 @@
+version 2.1.2
+- Pass along whether we should resume a movie
+
 version 2.1.1
 - Another attempt to keep Kodi from crashing on playback startup
 
