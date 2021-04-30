@@ -6,7 +6,7 @@ from logging import getLogger
 import sys
 import os
 
-import xbmc
+import xbmcvfs
 import xbmcgui
 import xbmcplugin
 import xbmcaddon
@@ -14,7 +14,7 @@ import xbmcaddon
 # Import from the main pkc add-on
 __addon__ = xbmcaddon.Addon(id='plugin.video.plexkodiconnect')
 __temp_path__ = os.path.join(__addon__.getAddonInfo('path'), 'resources', 'lib')
-__base__ = xbmc.translatePath(__temp_path__)
+__base__ = xbmcvfs.translatePath(__temp_path__)
 sys.path.append(__base__)
 
 import transfer, loghandler
