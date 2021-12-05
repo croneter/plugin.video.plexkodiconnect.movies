@@ -7,6 +7,8 @@
         <provides></provides>
     </extension>
     <extension point="xbmc.addon.metadata">
+        <!-- see e.g. https://github.com/xbmc/xbmc/pull/14136 -->
+        <reuselanguageinvoker>true</reuselanguageinvoker>
         <summary lang="en">PKC Dependency Add-On</summary>
         <description lang="en">PlexKodiConnect add-on for movies</description>
         <platform>all</platform>
