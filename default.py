@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 # We need this in order to use add-on paths like
 # 'plugin://plugin.video.plexkodiconnect.MOVIES' in the Kodi video database
-###############################################################################
 from logging import getLogger
 import sys
 import os
@@ -19,12 +18,8 @@ sys.path.append(__base__)
 
 import transfer, loghandler
 
-###############################################################################
 loghandler.config()
 LOG = getLogger('PLEX.MOVIES')
-###############################################################################
-
-HANDLE = int(sys.argv[1])
 
 
 def play():
@@ -32,24 +27,24 @@ def play():
     Start up playback_starter in main Python thread
     """
     LOG.debug('Full sys.argv received: %s', sys.argv)
-    request = f'{sys.argv[2]}&handle={HANDLE}'
+    request = f'{sys.argv[2]}&handle={int(sys.argv[1])}'
     if 'resume:true' in sys.argv:
         request += '&resume=1'
     elif 'resume:false' in sys.argv:
         request += '&resume=0'
     # Put the request into the 'queue'
     transfer.plex_command(f'PLAY-{request}')
-    if HANDLE == -1:
+    if int(sys.argv[1]) == -1:
         # Handle -1 received, not waiting for main thread
         return
     # Wait for the result
     result = transfer.wait_for_transfer(source='main')
     if result is True:
-        xbmcplugin.setResolvedUrl(HANDLE, False, xbmcgui.ListItem())
+        xbmcplugin.setResolvedUrl(int(sys.argv[1]), False, xbmcgui.ListItem())
         # Tell main thread that we're done
         transfer.send(True, target='main')
     else:
-        xbmcplugin.setResolvedUrl(HANDLE, True, result)
+        xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, result)
 
 
 if __name__ == '__main__':
