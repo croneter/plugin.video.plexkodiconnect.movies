@@ -1,3 +1,6 @@
+version 3.0.2
+- Use addon.xml `reuselanguageinvoker` to turn add-on snappier
+
 version 3.0.1
 - Make PKC compatible with Kodi 20 N* by using xbmcvfs for translatePath
 

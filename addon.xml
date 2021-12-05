@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.plexkodiconnect.movies" name="PlexKodiConnect Helper Movies" version="3.0.1" provider-name="croneter">
+<addon id="plugin.video.plexkodiconnect.movies" name="PlexKodiConnect Helper Movies" version="3.0.2" provider-name="croneter">
     <requires>
         <import addon="xbmc.python" version="3.0.0"/>
     </requires>
@@ -15,7 +15,10 @@
         <forum></forum>
         <website>https://github.com/croneter/PlexKodiConnect</website>
         <source></source>
-        <news>version 3.0.1
+        <news>version 3.0.2
+- Use addon.xml `reuselanguageinvoker` to turn add-on snappier
+
+version 3.0.1
 - Make PKC compatible with Kodi 20 N* by using xbmcvfs for translatePath
 
 version 3.0.0
